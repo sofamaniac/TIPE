@@ -1,0 +1,5 @@
+Mesurer comment l'impact de véhicules autonomes connaissant l'état du traffic en temps réel
+et changeant leur itinéraire afin d'éviter d'engorger les artères principales
+
+idées pour le futur:
+-mesurer l'impact sur la consommation d'énérgie

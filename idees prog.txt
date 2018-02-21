@@ -1,0 +1,14 @@
+pour la gestion des prorités sur la route : 
+-donner à chaque route un indice de priorité (ex : 5 -> priorité max, 1-> priorité minimale)
+-si deux routes ont la même priorité : règle de la priorité à droite
+-chaque voiture doit avoir une vitesse max et un temps de réaction avant le freinage
+-pour détecter quand freiner ou les voitures dans une priorité à droite : ray casting
+-les voitures autonomes n'ont pas de temps de réaction
+(-les voitures autonomes ont pour seule info le nombre de voitures dans 
+  les prochaines rues qu'elles veulent prendre)
+(-Chaque voiture aura au final une destination différentes et apparaitra à un endroit aléatoire de la carte
+ -pour représenter la destination de chaque voiture, associé une couleur à chaque quartier et donner
+  cette couleur à la voiture)
+-intégrer des feux tricolores
+-tester sur des maps ou il ya des points "névralgiques" (ex : 1 seul pont pour relier les deux motiés 
+ d'une ville)
