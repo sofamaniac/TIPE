@@ -1,0 +1,25 @@
+Nodes : 
+- Attributs
+	- position
+
+Vertices : 
+- Attributs
+	- depart
+	- arrivee
+	- vitesse max
+	- priorite
+Voiture:
+-Attributs
+	- position
+	- vitesse
+	- acceleration
+	- direction
+-Methodes
+	- update
+	- accelerer
+Humain:
+-Attributs
+	- depart
+	- arrivee
+	- delta_vitesse
+	- temps de reaction
