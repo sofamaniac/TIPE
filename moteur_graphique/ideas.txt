@@ -1,0 +1,33 @@
+fichier contenant les traces de recherches pour un moteur graphique en python utilisant pygame
+
+-créer un objet graphique qui contient:
+    -attributs:
+        -une texture / image
+        -des coordonnees
+    -méthodes:
+        -une fonction pour l'afficher du style objet.show(fenetre)
+        -éventuellement, move(dx, dy) et set_pos(x, y)
+
+-créer un objet pour les objets animés:
+    -hérite de l'objet précdédent
+    -contient une liste d'images
+    -la durée de chaque frame
+    -possède une fonction objet.update(), pour mettre la frame affichée à jour
+
+-créer un objet groupe pour les animations
+    -attributs:
+        -liste d'animations
+        -bool pause
+
+    -méthodes:
+        -add, permet d'ajouter un élément au groupe
+        -remove, permet de retirer un élément du groupe
+        -pause, permet de mettre ou de sortir de pause
+        -update, appelle objets.update des différents éléments du groupe
+
+
+-créer un objet text:
+    -celui ci prend en parametre lors de sa création le texte à afficher, la police, la taille, et le mode pour centrer la surface
+        soit par rapport au centre de l'image, soit par rapport au coin supérieur gauche
+
+    -les coordonnees adaptées sont automatiquement calculé à partir de ce mode

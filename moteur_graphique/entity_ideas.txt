@@ -1,0 +1,8 @@
+Fichier contenant les idees pour les entities
+
+
+Objet entity
+    -position
+    -position_mode
+    -hitbox
+    -bool visible
