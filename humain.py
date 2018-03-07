@@ -1,7 +1,8 @@
 """Fichier contenant le code relatif aux pilotes humains"""
 
 from math import inf as infinity
-from pilote import get_distance
+from random import gauss
+from pilote import *
 
 
 def minimu(dico):
@@ -63,3 +64,15 @@ def dijkstra(debut, fin, world):
 		node = prev[node]
 
 	return path  # le chemin est à l'envers
+
+
+class Humain(Pilote):
+
+	def __init__(self, voiture, debut, arrivee, world):
+
+		self.temps_react = 0.1  # temps de réaction de l'humain
+		self.delta_v = gauss(1, 0.3)  # les humains roulent delat_v % de la vitesse max
+
+		Pilote.__init__(self, voiture, arrivee)
+
+		self.chemin = dijkstra(debut, arrivee, world)  # les humains suivent toujours le chemin le plus court

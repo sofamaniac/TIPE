@@ -1,6 +1,5 @@
 """Fichier contenant le code relatif aux routes"""
 
-from math import sqrt
 from pilote import get_distance
 
 
@@ -23,3 +22,4 @@ class Intersection:  # équivaut à un noeud d'un graphe
 
 		self.pos = []
 		self.voisins = []
+		self.connection = {}  # couples {intersection: route pour connaitres les connections entre inersections
