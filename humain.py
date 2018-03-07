@@ -1,17 +1,32 @@
 """Fichier contenant le code relatif aux pilotes humains"""
 
-from copy import copy
 from math import inf as infinity
 from pilote import get_distance
+
+
+def minimu(dico):
+	"""Fonction permettant d'obtenir la node avec la plus petite distance"""
+
+	res = []  # on créer une liste de la forme [[distance, index, node], ...]
+
+	for element in dico.items():
+		temp = element[1]
+		temp.append(element[0])
+		res.append(temp)
+
+	res.sort(key=lambda x: x[0])  # on trie cette liste en se basant sur la première valeur de chaque sous liste
+	return res[0][2]
 
 
 def dijkstra(debut, fin, world):
 	"""Implémentation de l'algorithme de djikstra avec world la liste des intersections"""
 
-	unvisited = {}
+	unvisited = {}  # contient des élément de la forme {node: distance}
 	prev = {debut: None}  # contient une liste chainée des chemins les plus courts pour toutes les nodes visitées
 
 	index = 0
+
+	# ====== CREATION DE UNVISITED ====== #
 
 	for inter in world:
 		if inter == debut:
@@ -20,9 +35,11 @@ def dijkstra(debut, fin, world):
 			unvisited.update(inter=[infinity, index])
 		index += 1
 
+	# ====== ALGORITHME DE DJIKSTRA ====== #
+
 	while len(unvisited) > 0:
 
-		current = min(unvisited, key=unvisited.get)
+		current = minimu(unvisited)
 		key = unvisited.keys()
 
 		if current == fin:
