@@ -1,6 +1,6 @@
 """Fichier contenant le code relatif aux voitures"""
 
-from math import acos, degrees
+from math_alt import *
 from moteur_graphique import moteur_graph as graph
 
 
@@ -52,7 +52,7 @@ class Voiture(graph.GraphObject):
 	def set_dir(self, new_dir):
 		"""Lors du changement de direction il faut mettre à jour l'image de la voiture"""
 		self._direction = new_dir
-		self.angle = degrees(acos(new_dir[0]))
+		self.angle = get_rotation(new_dir)
 		self.rotate(self.angle)
 
 	direction = property(get_dir, set_dir)

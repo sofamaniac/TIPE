@@ -1,6 +1,6 @@
 """Fichier contenant le code nécessaire pour conduire les voitures"""
 
-from math import sqrt
+from math_alt import *
 
 
 class Pilote:
@@ -29,8 +29,3 @@ class Pilote:
 		for element in world:
 			if get_distance(self, element) <= self.range:
 				resultat.append(element)
-
-
-def get_distance(a, b):
-	"""Retourne la distance entre deux obkets possédant un attribut pos"""
-	return sqrt(pow(a.pos[0] - b.pos[0], 2) + pow(a.pos[1] - b.pos[1], 2))

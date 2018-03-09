@@ -112,7 +112,6 @@ class AnimatedObject(GraphObject):
 		current_time = time()
 
 		if (current_time - self.last_change) > self.frame_duration:
-
 			self.last_change = current_time
 
 			self.current_index += 1
@@ -153,7 +152,8 @@ class AnimatedGroup:
 class TextHandler(GraphObject):
 	"""Class to easily transform and manipulate text into surface"""
 
-	def __init__(self, text, size, police, position, pos_mode="center", color=(255, 255, 255), italic=False, bold=False, underlined=False, antialias=True, background=None):
+	def __init__(self, text, size, police, position, pos_mode="center", color=(255, 255, 255), italic=False, bold=False,
+				 underlined=False, antialias=True, background=None):
 		"""Modes for position are :
 				-center : the position given is the one of the center
 				-top_left : the position given is the one of the top left corner"""
@@ -174,7 +174,6 @@ class TextHandler(GraphObject):
 		GraphObject.__init__(self, self.image, position)
 
 		if pos_mode == "center":
-
 			size = self.image.get_size()
 
 			x = position[0] - size[0] / 2
@@ -200,7 +199,6 @@ class TextHandler(GraphObject):
 		"""Set the position of the surface depending on the position mode of the object"""
 
 		if self.pos_mode == "center":
-
 			size = self.image.get_size()
 
 			x = self.pos[0] - size[0] / 2

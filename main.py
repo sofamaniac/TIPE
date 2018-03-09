@@ -1,10 +1,11 @@
 """Fichier principal du programme"""
 
 from time import sleep
-from math import cos, sin
+
 import pygame
-from pygame.locals import *
+
 from voiture import *
+from route import *
 
 
 pygame.init()
@@ -15,6 +16,11 @@ rot = 90
 voiture = Voiture(pos=[300, 200])
 voiture.vitesse = 0
 
+debut = Intersection([0, 0])
+fin = Intersection([100, 100])
+
+route = Route(debut, fin, 0)
+
 while continuer:
 
 	for event in pygame.event.get():
@@ -24,6 +30,7 @@ while continuer:
 	fenetre.fill((0, 0, 0))
 	voiture.update()
 	voiture.show(fenetre)
+	route.show(fenetre)
 	pygame.display.update()
 
 	sleep(1/60)
