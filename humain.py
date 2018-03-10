@@ -49,7 +49,7 @@ def dijkstra(debut, fin, world):
 		for voisin in current.voisins:
 			if voisin in key:
 				# on ne peut faire l'algorithme que si le voisin n'a pas été visitée
-				dist_alt = unvisited[current][0] + get_distance(current, voisin)
+				dist_alt = unvisited[current][0] + get_distance_obj(current, voisin)
 				if dist_alt < unvisited[voisin][0]:
 					unvisited[voisin][0] = dist_alt
 					prev.update(voisin=current)
@@ -71,7 +71,7 @@ class Humain(Pilote):
 	def __init__(self, voiture, debut, arrivee, world):
 
 		self.temps_react = 0.1  # temps de réaction de l'humain
-		self.delta_v = gauss(1, 0.3)  # les humains roulent delat_v % de la vitesse max
+		self.delta_v_max = gauss(1, 0.3)  # les humains roulent delat_v % de la vitesse max
 
 		Pilote.__init__(self, voiture, arrivee)
 

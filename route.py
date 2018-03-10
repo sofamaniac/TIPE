@@ -13,7 +13,7 @@ class Route(graph.GraphObject):  # équivaut a une vertice d'un graphe
 		self.debut = debut  # debut et fin sont des intersections
 		self.fin = fin
 		self.v_max = 0  # contient la vitesse maximale autorisée sur cette route
-		self.longueur = get_distance(debut, fin)  # contient la longueur de la route
+		self.longueur = get_distance_obj(debut, fin)  # contient la longueur de la route
 		self.get_dir = get_dir  # permet d'avoir des routes qui ne soient pas des lignes droites
 
 		angle = get_rotation(self.debut.pos, self.fin.pos)

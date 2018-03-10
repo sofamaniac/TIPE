@@ -1,5 +1,7 @@
 """Fichier contenant le code relatif aux voitures"""
 
+from pygame.locals import SRCALPHA
+
 from math_alt import *
 from moteur_graphique import moteur_graph as graph
 
@@ -21,27 +23,30 @@ class Voiture(graph.GraphObject):
 		length = 30
 		height = 15
 
-		image = graph.pygame.Surface((length, height), graph.pygame.locals.SRCALPHA)
+		image = graph.pygame.Surface((length, height), SRCALPHA)
 
-		image_1 = graph.pygame.Surface((int(3/4 * length), height))
-		image_2 = graph.pygame.Surface((length - (3/4 * length), height))
+		image_1 = graph.pygame.Surface((int(1 / 4 * length), height), SRCALPHA)
+		image_2 = graph.pygame.Surface((int(3 / 4 * length), height), SRCALPHA)
 
-		image_1.fill((155, 155, 155))
-		image_2.fill((200, 200, 200))
+		image_1.fill((200, 200, 200))
+		image_2.fill((100, 100, 100))
+		image.fill((255, 255, 255))
 		image.blit(image_1, (0, 0))
-		image.blit(image_2, (15, 0))
+		image.blit(image_2, (int(1 / 4 * length), 0))
 
 		graph.GraphObject.__init__(self, image, pos)
 
 	def update(self):
 		"""Fonction mettant à jour la position et la vitesse de la voiture"""
-		self.vitesse += self.acceleration
+		self.vitesse += self.acceleration * 1 / 60
 
 		v_x = self.vitesse * self._direction[0]
 		v_y = self.vitesse * self._direction[1]
 
-		self.pos[0] += v_x
-		self.pos[1] += v_y
+		self.pos[0] += v_x * 1 / 60
+		self.pos[1] += v_y * 1 / 60
+
+		self.acceleration = 0  # l'accélération est remise à zéro à chaque fois
 
 	def accelerer(self, da):
 		self.acceleration += da
