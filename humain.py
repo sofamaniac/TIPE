@@ -5,7 +5,7 @@ from random import gauss
 from pilote import *
 
 
-def minimu(dico):
+def minimum(dico):
 	"""Fonction permettant d'obtenir la node avec la plus petite distance"""
 
 	res = []  # on créer une liste de la forme [[distance, index, node], ...]
@@ -40,7 +40,7 @@ def dijkstra(debut, fin, world):
 
 	while len(unvisited) > 0:
 
-		current = minimu(unvisited)
+		current = minimum(unvisited)
 		key = unvisited.keys()
 
 		if current == fin:
