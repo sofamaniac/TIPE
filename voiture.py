@@ -20,8 +20,8 @@ class Voiture(graph.GraphObject):
 
 		# ======CREATION DE L'IMAGE DE LA VOITURE====== #
 
-		length = 30
-		height = 15
+		length = 60
+		height = 32
 
 		image = graph.pygame.Surface((length, height), SRCALPHA)
 

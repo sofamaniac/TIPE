@@ -22,8 +22,8 @@ def signe(a):
 
 
 def get_rotation(coords_a, coords_b=(0, 0)):
-	"""Retourne l'angle oritenté en degré du segment ab par rapport à l'horizontale, un segment de longueur nulle à
-	un angle orienté de 0 degrés"""
+	"""Retourne l'angle oritenté en radians du segment ab par rapport à l'horizontale, un segment de longueur nulle a
+	un angle orienté de 0 radians"""
 
 	dx = coords_b[0] - coords_a[0]
 	dy = coords_b[1] - coords_a[1]
@@ -36,7 +36,7 @@ def get_rotation(coords_a, coords_b=(0, 0)):
 		s = dy / l  # sinus de l'angle orienté
 
 		# Il faut inverser l'angle de rotation à cause du sens de l'axe des ordonnées
-		angle = degrees(acos(c)) * signe(-s)  # permet d'avoir un angle orienté
+		angle = acos(c) * signe(s)  # permet d'avoir un angle orienté
 
 	else:
 		angle = 0
@@ -56,3 +56,15 @@ def mappage(x, start_inter, end_inter):
 	res = (x - a) / (b - a) * (d - c) + c
 
 	return res
+
+
+def transform(pt, tr, rot):
+	"""Fonction qui prend en argument un point, une translation et une rotation en radian et retourne les coordonnées
+	après changement de base"""
+	tr_x = pt[0] - tr[0]
+	tr_y = pt[1] - tr[1]
+
+	res_x = tr_x * cos(rot) + tr_y * sin(rot)
+	res_y = tr_y * cos(rot) - tr_x * sin(rot)
+
+	return [res_x, res_y]

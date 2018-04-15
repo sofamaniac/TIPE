@@ -14,10 +14,10 @@ class Pilote:
 		self.arrivee = arrivee  # là où souhaite se rendre le pilote
 		self.chemin = []  # contient les intersections que doit suivre la voiture pour arriver à destination
 		self.current_road = None  # contient la route sur laquelle se trouve le véhicule
-		self.range = 15  # champs de vision
+		self.range = 200  # champs de vision
 		self.delta_v = 0  # les pilotes ralentissent pour prendre les virages, varie entre 0 et 1
-		self.acceleration_max = 100  # représente l'accélération maximale en m.s-1 (valeur moyenne sur Internet)
-		self.deceleration_max = 200
+		self.acceleration_max = 100  # représente l'accélération maximale en px.s-1
+		self.deceleration_max = 2000
 		self.fenetre = fenetre  # contient la fenetre sur laquelle est affichée la voiture
 
 	def update(self):
@@ -55,16 +55,23 @@ class Pilote:
 
 			close = obstacles[0]  # on ne garde que l'obstacle le plus proche
 
-			if isinstance(close[0], Intersection):
+			if isinstance(close[0], Intersection) and close[1] < 100:
 				x = close[1] / self.range
-				x = mappage(x, [0, 1], [0.2, 1])
+				x = mappage(x, [0, 1], [0.1, 1])
 				vitesse_cible = self.current_road.v_max * x
+
+			if isinstance(close[0], Intersection) and close[1] < 16 and close[
+				0] == self.current_road.fin and self.chemin:
+				# on change de route quand close[1] < à 1/2 largeur de voiture
+				self.current_road = self.chemin[1]
 
 		if self.voiture.vitesse != vitesse_cible:
 			sens_acc = signe(vitesse_cible - self.voiture.vitesse)  # faut il accélérer ou freiner
 			acceleration = abs(vitesse_cible - self.voiture.vitesse)
 			if sens_acc > 0:  # il faut accélérer
 				acceleration = min(self.acceleration_max, acceleration)
+				self.voiture._image.fill((0, 255, 0))
 			else:  # il faut freiner
 				acceleration = -min(self.deceleration_max, acceleration)
+				self.voiture._image.fill((255, 0, 0))
 			self.voiture.accelerer(acceleration)
