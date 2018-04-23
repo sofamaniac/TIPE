@@ -2,27 +2,29 @@
 
 import pygame
 
+
 def subdivide(parent, rect):
-    """return a subsurface"""
-    return parent.subsurface(rect)
+	"""return a subsurface"""
+	return parent.subsurface(rect)
+
 
 def subdivisions(parent, cols, rows):
-    """return a list of subsurface"""
+	"""return a list of subsurface"""
 
-    subsurfaces = []
+	subsurfaces = []
 
-    xoff = parent.get_width() / cols
-    yoff = parent.get_height() / rows
+	xoff = parent.get_width() / cols
+	yoff = parent.get_height() / rows
 
-    x = 0
-    y = 0
+	x = 0
+	y = 0
 
-    for j in range(rows):
-        for i in range(cols):
-            rect = pygame.Rect(x, y, xoff, yoff)
-            subsurfaces.append(subdivide(parent, rect))
-            x += xoff
-        y += yoff
-        x = 0
+	for j in range(rows):
+		for i in range(cols):
+			rect = pygame.Rect(x, y, xoff, yoff)
+			subsurfaces.append(subdivide(parent, rect))
+			x += xoff
+		y += yoff
+		x = 0
 
-    return subsurfaces
+	return subsurfaces

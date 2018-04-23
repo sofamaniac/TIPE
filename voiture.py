@@ -8,8 +8,9 @@ from moteur_graphique import moteur_graph as graph
 
 class Voiture(graph.GraphObject):
 
-	def __init__(self, pos=[0, 0]):
-
+	def __init__(self, pos=(0, 0)):
+		if pos is None:
+			pos = [0, 0]
 		self.vitesse = 0
 		self.acceleration = 0
 

@@ -58,13 +58,30 @@ def mappage(x, start_inter, end_inter):
 	return res
 
 
-def transform(pt, tr, rot):
+def transform(pt, tr=(0, 0), rot=0):
 	"""Fonction qui prend en argument un point, une translation et une rotation en radian et retourne les coordonnées
 	après changement de base"""
 	tr_x = pt[0] - tr[0]
 	tr_y = pt[1] - tr[1]
 
-	res_x = tr_x * cos(rot) + tr_y * sin(rot)
-	res_y = tr_y * cos(rot) - tr_x * sin(rot)
+	res_x = round(tr_x * cos(rot) + tr_y * sin(rot))
+	res_y = round(tr_y * cos(rot) - tr_x * sin(rot))
 
 	return [res_x, res_y]
+
+
+def normalize(vect):
+	"""Fonction retournant un vecteur unitaire colinéaire à vect"""
+
+	norme = get_distance_list([0, 0], vect)
+
+	res = [vect[0] / norme, vect[1] / norme]
+
+	return res
+
+
+def round(x, prec=11):
+	"""Fonction retournant une valeur de x arrondi à l'inférieur avec une précision de 'prec' décimales"""
+	p = pow(10, prec)
+	x_int = int(x * p)
+	return x_int / p

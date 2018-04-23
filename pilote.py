@@ -1,7 +1,5 @@
 """Fichier contenant le code nécessaire pour conduire les voitures"""
 
-from math_alt import *
-
 from route import *
 
 
@@ -21,7 +19,7 @@ class Pilote:
 		self.fenetre = fenetre  # contient la fenetre sur laquelle est affichée la voiture
 
 	def update(self):
-
+		"""Focntion mettant le pilote à jour et devant être appelée une fois par frame"""
 		new_dir = self.current_road.get_direction(self.pos)
 		old_dir = self.voiture.direction
 
@@ -44,10 +42,11 @@ class Pilote:
 			if distance <= self.range:
 				resultat.append([element, distance])
 		resultat.sort(key=lambda x: x[1])  # les objets les plus proches seront les premiers dans la liste
+
 		return resultat
 
 	def accelerer(self, world):
-
+		"""Fonction temporaire déterminant l'accélération de la voiture à chaque frame"""
 		obstacles = self.see(world)
 		vitesse_cible = self.current_road.v_max * self.delta_v
 
@@ -55,15 +54,16 @@ class Pilote:
 
 			close = obstacles[0]  # on ne garde que l'obstacle le plus proche
 
-			if isinstance(close[0], Intersection) and close[1] < 100:
+			if isinstance(close[0], Intersection) and close[1] < 100 and close[0].max_prio > self.current_road.prio:
 				x = close[1] / self.range
-				x = mappage(x, [0, 1], [0.1, 1])
+				x = mappage(x, [0, 1], [0.1, 1])  # determine la force du freinage
 				vitesse_cible = self.current_road.v_max * x
 
-			if isinstance(close[0], Intersection) and close[1] < 16 and close[
-				0] == self.current_road.fin and self.chemin:
+			if isinstance(close[0], Intersection) and close[1] < 16 and close[0] == self.current_road.fin \
+					and len(self.chemin) > 1:
 				# on change de route quand close[1] < à 1/2 largeur de voiture
-				self.current_road = self.chemin[1]
+				self.chemin.pop(0)
+				self.current_road = self.chemin[0]
 
 		if self.voiture.vitesse != vitesse_cible:
 			sens_acc = signe(vitesse_cible - self.voiture.vitesse)  # faut il accélérer ou freiner

@@ -68,11 +68,11 @@ def dijkstra(debut, fin, world):
 
 class Humain(Pilote):
 
-	def __init__(self, voiture, debut, arrivee, world):
+	def __init__(self, voiture, debut, arrivee, world, fenetre):
 
 		self.temps_react = 0.1  # temps de réaction de l'humain
 		self.delta_v_max = gauss(1, 0.3)  # les humains roulent delat_v % de la vitesse max
 
-		Pilote.__init__(self, voiture, arrivee)
+		Pilote.__init__(self, voiture, arrivee, fenetre)
 
 		self.chemin = dijkstra(debut, arrivee, world)  # les humains suivent toujours le chemin le plus court

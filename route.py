@@ -15,6 +15,7 @@ class Route(graph.GraphObject):  # équivaut a une vertice d'un graphe
 		self.v_max = 0  # contient la vitesse maximale autorisée sur cette route
 		self.longueur = get_distance_obj(debut, fin)  # contient la longueur de la route
 		self.get_dir = get_dir  # permet d'avoir des routes qui ne soient pas des lignes droites
+		self.prio = 0  # niveau de priorité de la route
 
 		angle = get_rotation(self.debut.pos, self.fin.pos)
 		image = graph.pygame.Surface((self.longueur, 50), graph.pygame.locals.SRCALPHA)
@@ -34,3 +35,4 @@ class Intersection:  # équivaut à un noeud d'un graphe
 		self.pos = pos
 		self.voisins = []  # contient une liste des nodes auxquelles est connectée l'intersection
 		self.connection = {}  # couples {intersection: route} pour connaitres les connections entre inersections
+		self.max_prio = 0  # correspond à la priorité maximale de toutes les routes connectées à l'intersection

@@ -182,7 +182,7 @@ class TextHandler(GraphObject):
 			position = [x, y]
 			self.pos = position
 
-		# self.update_hitbox()  # Je sais pas à quoi ça sert :((((((
+	# self.update_hitbox()  # Je sais pas à quoi ça sert :((((((
 
 	def get_attribute(self, key):
 		"""Return the value of the specified attribute"""

@@ -34,9 +34,9 @@ class Player:
 		crouch_animations = create_animations("sprites/player/john_crouch.png", 2, 1, self.pos)
 
 		self.animations = {"run": run_animations,
-							"jump": jump_animations,
-							"crouch": crouch_animations,
-							"idle": idle_animations}
+						   "jump": jump_animations,
+						   "crouch": crouch_animations,
+						   "idle": idle_animations}
 
 		self.animations["crouch"].frames = self.animations["crouch"].frames[1:]  # on vire une frame en trop
 
