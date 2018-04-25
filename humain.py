@@ -2,6 +2,8 @@
 
 from math import inf as infinity
 from random import gauss
+from time import time
+
 from pilote import *
 
 
@@ -71,8 +73,48 @@ class Humain(Pilote):
 	def __init__(self, voiture, debut, arrivee, world, fenetre):
 
 		self.temps_react = 0.1  # temps de réaction de l'humain
-		self.delta_v_max = gauss(1, 0.3)  # les humains roulent delat_v % de la vitesse max
+		self.detected = {}  # {objet: heure [détection, distance]}
 
 		Pilote.__init__(self, voiture, arrivee, fenetre)
 
 		self.chemin = dijkstra(debut, arrivee, world)  # les humains suivent toujours le chemin le plus court
+		self.delta_v_max = gauss(1, 0.3)  # les humains roulent delat_v % de la vitesse max
+		self.distance_freinage = self.range * 1 / 2  # les humains freinent très tardivement
+
+	def conduire(self, world):
+
+		seen = self.see(world)  # liste des objets dans le champ de vision de l'humain ansi que leur distance
+
+		keys = self.detected.keys()
+
+		t = time()
+
+		for index in range(len(seen)):
+			obstacle = seen[index]
+			if obstacle[0] in keys:
+				# on met à jour la distance de l'objet dans le dictionnaire
+				self.detected[obstacle[0]][1] = seen[0]
+			else:
+				# on ajoute l'obstacle dans le dictionnaire
+				self.detected.update({obstacle[0]: t})
+
+		seen_keys = [obstacle[0] for obstacle in seen]
+		for key in keys:
+			if key not in seen_keys:
+				del self.detected[key]
+
+		closest = None
+
+		while len(seen) and not closest:
+			if isinstance(seen[0][0], Intersection):
+				closest = seen[0]
+			else:
+				other_road = seen[0][0].current_road
+				if other_road.fin != self.current_road.debut and other_road.debut != self.current_road.fin:
+					# on ne considère pas les voitures sur la même route mais dans l'autre sens
+					closest = seen[0]
+				else:
+					seen.pop(0)
+
+		if closest and t > self.detected[closest] + self.temps_react:
+			Pilote.conduire(self, closest)
