@@ -8,12 +8,17 @@ import pygame
 class GraphObject:
 	"""Object which handle images"""
 
-	def __init__(self, image, pos):
+	def __init__(self, image, pos, mode="center"):
 
 		self.image = image  # peut subir des rotations
 		self._image = image  # version de l'image qui ne sera jamais modifiée
-		self.pos = pos  # current position of the object
 		self.size = self.image.get_size()  # size (length, width) of the object
+		self.pos = pos  # current position of the object
+		self.mode = mode  # what point self.pos refers to, can be "center" or "corner"
+
+		if mode == "center":
+			self.pos[0] = self.pos[0] - (self.size[0] / 2)
+			self.pos[1] = self.pos[1] - (self.size[1] / 2)
 
 	def move(self, dx=0, dy=0):
 		"""Move the object by dx, dy"""
@@ -22,6 +27,7 @@ class GraphObject:
 		self.pos[1] += dy
 
 	def rotate(self, angle):
+		"""Rotate the image of the object by the angle given in degrees"""
 		self.image = pygame.transform.rotate(self._image, angle)
 
 	def show(self, fenetre):
@@ -50,7 +56,7 @@ class GraphObject:
 			return self.compare_projection(entities)
 
 	def compare_projection(self, entity):
-		"""Use projection on both axis to know if rectangle are overlapping"""
+		"""Use projection on both x and y axis to know if rectangle are overlapping"""
 
 		# size and x coordonate of the object
 		x_a = self.pos[0]

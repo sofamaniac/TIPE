@@ -21,31 +21,30 @@ class Voiture(graph.GraphObject):
 
 		# ======CREATION DE L'IMAGE DE LA VOITURE====== #
 
-		length = 60
+		self.length = 60  # utitlisé pour prendre en compte la longueur de la voiture dans le calcul de distance
 		height = 32
 
-		image = graph.pygame.Surface((length, height), SRCALPHA)
+		image = graph.pygame.Surface((self.length, height), SRCALPHA)
 
-		image_1 = graph.pygame.Surface((int(1 / 4 * length), height), SRCALPHA)
-		image_2 = graph.pygame.Surface((int(3 / 4 * length), height), SRCALPHA)
+		image_1 = graph.pygame.Surface((int(1 / 4 * self.length), height), SRCALPHA)
+		image_2 = graph.pygame.Surface((int(3 / 4 * self.length), height), SRCALPHA)
 
 		image_1.fill((200, 200, 200))
 		image_2.fill((100, 100, 100))
 		image.fill((255, 255, 255))
 		image.blit(image_1, (0, 0))
-		image.blit(image_2, (int(1 / 4 * length), 0))
+		image.blit(image_2, (int(1 / 4 * self.length), 0))
 
 		graph.GraphObject.__init__(self, image, pos)
 
 	def update(self):
 		"""Fonction mettant à jour la position et la vitesse de la voiture"""
-		self.vitesse += self.acceleration * 1 / 60
+		self.vitesse += self.acceleration * 1 / 60  # la vitesse est passée px.s-1 sauf que l'on est en px.frame-1
 
 		v_x = self.vitesse * self._direction[0]
 		v_y = self.vitesse * self._direction[1]
 
-		self.pos[0] += v_x * 1 / 60
-		self.pos[1] += v_y * 1 / 60
+		self.move(v_x * 1 / 60, v_y * 1 / 60)
 
 		self.acceleration = 0  # l'accélération est remise à zéro à chaque fois
 
