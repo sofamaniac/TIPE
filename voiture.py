@@ -9,6 +9,9 @@ from moteur_graphique import moteur_graph as graph
 class Voiture(graph.GraphObject):
 
 	def __init__(self, pos=(0, 0)):
+
+		# les voitures sont condidérées comme des objets ponctuels
+
 		if pos is None:
 			pos = [0, 0]
 		self.vitesse = 0
@@ -35,11 +38,14 @@ class Voiture(graph.GraphObject):
 		image.blit(image_1, (0, 0))
 		image.blit(image_2, (int(1 / 4 * self.length), 0))
 
-		graph.GraphObject.__init__(self, image, pos)
+		graph.GraphObject.__init__(self, image, pos, "corner")
 
 	def update(self):
 		"""Fonction mettant à jour la position et la vitesse de la voiture"""
 		self.vitesse += self.acceleration * 1 / 60  # la vitesse est passée px.s-1 sauf que l'on est en px.frame-1
+
+		if self.vitesse < 0.01:
+			self.vitesse = 0
 
 		v_x = self.vitesse * self._direction[0]
 		v_y = self.vitesse * self._direction[1]
@@ -57,7 +63,7 @@ class Voiture(graph.GraphObject):
 	def set_dir(self, new_dir):
 		"""Lors du changement de direction il faut mettre à jour l'image de la voiture"""
 		self._direction = new_dir
-		self.angle = get_rotation(new_dir)
+		self.angle = angle_between(new_dir)
 		self.rotate(self.angle)
 
 	direction = property(get_dir, set_dir)

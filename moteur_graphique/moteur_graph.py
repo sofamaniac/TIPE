@@ -28,6 +28,7 @@ class GraphObject:
 
 	def rotate(self, angle):
 		"""Rotate the image of the object by the angle given in degrees"""
+
 		self.image = pygame.transform.rotate(self._image, angle)
 
 	def show(self, fenetre):
@@ -42,7 +43,6 @@ class GraphObject:
 		self.pos[1] = y
 
 	def is_overlapping(self, entities):
-
 		"""If a list is given return the index of the element colliding if needed else return None,
 		if entity object given return True if colliding, else return False"""
 
@@ -156,7 +156,7 @@ class AnimatedGroup:
 
 
 class TextHandler(GraphObject):
-	"""Class to easily transform and manipulate text into surface"""
+	"""Class to easily transform text into surface and manipulate it"""
 
 	def __init__(self, text, size, police, position, pos_mode="center", color=(255, 255, 255), italic=False, bold=False,
 				 underlined=False, antialias=True, background=None):

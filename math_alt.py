@@ -1,11 +1,18 @@
 """Fichier contenant les fonction mathémétiques nécessaires au programme"""
 
 from math import *
+import numpy as np
+
+M = 15  # mètre de référence en pixel, valeur complètement aléatoire
 
 
 def get_distance_obj(a, b):
 	"""Retourne la distance entre deux objets possédant un attribut pos"""
 	return sqrt(pow(a.pos[0] - b.pos[0], 2) + pow(a.pos[1] - b.pos[1], 2))
+
+
+def distance_squared_obj(a, b):
+	return pow(a.pos[0] - b.pos[0], 2) + pow(a.pos[1] - b.pos[1], 2)
 
 
 def get_distance_list(a, b):
@@ -44,6 +51,14 @@ def get_rotation(coords_a, coords_b=(0, 0)):
 	return angle
 
 
+def angle_between(p1, p2=(0, 0)):
+	"""Retourne l'angle en degrés du segment formé des deux points"""
+	ang1 = np.arctan2(*p1[::-1])
+	ang2 = np.arctan2(*p2[::-1])
+
+	return np.rad2deg((ang1 - ang2) % (2 * np.pi))
+
+
 def mappage(x, start_inter, end_inter):
 	"""Map linéairement un nombre appartenant start_inter à end_inter"""
 
@@ -80,7 +95,7 @@ def normalize(vect):
 	return res
 
 
-def round(x, prec=11):
+def round(x, prec=10):
 	"""Fonction retournant une valeur de x arrondi à l'inférieur avec une précision de 'prec' décimales"""
 	p = pow(10, prec)
 	x_int = int(x * p)

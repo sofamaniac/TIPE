@@ -16,6 +16,8 @@ class Route(graph.GraphObject):  # équivaut a une vertice d'un graphe
 		self.longueur = get_distance_obj(debut, fin)  # contient la longueur de la route
 		self.get_dir = get_dir  # permet d'avoir des routes qui ne soient pas des lignes droites
 		self.prio = 0  # niveau de priorité de la route
+		self.prio_max = 0  # niveau de priorité maximale à attribuer à la route (sert pour les feux tricolores)
+		self.oppose = None  # route conjugée a celle-ci
 
 		angle = get_rotation(self.debut.pos, self.fin.pos)
 		image = graph.pygame.Surface((self.longueur, 50), graph.pygame.locals.SRCALPHA)
@@ -23,7 +25,7 @@ class Route(graph.GraphObject):  # équivaut a une vertice d'un graphe
 		pos = [min(self.debut.pos[0], self.fin.pos[0]), min(self.debut.pos[1], self.fin.pos[1])]  # coin supérieur
 		# gauche de l'image
 
-		graph.GraphObject.__init__(self, image, pos)
+		graph.GraphObject.__init__(self, image, pos, mode="corner")
 		self.rotate(angle)
 
 	def get_direction(self, pos):  # permet d'avoir des routes parfaitement courbes

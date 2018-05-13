@@ -41,5 +41,12 @@ def find_ellipse(A, P, M):
 							- a * sin(t) * sin_phi + b * cos(t) * cos_phi]
 
 	# ellipse_dxy represent la dérivée en fonction de la position sur l'ellipse
-	ellipse_dxy = lambda pos: normalize(ellipse_dt(acos(transform(pos, [x0, y0], phi)[0] / r)))
+	ellipse_dxy = lambda pos: normalize(ellipse_dt(acos(restreint(transform(pos, [x0, y0], phi)[0] / r))))
 	return ellipse_dxy
+
+
+def restreint(a, b=1):
+	if abs(a) < b:
+		return a
+	else:
+		return b * signe(a)
