@@ -16,8 +16,8 @@ class Pilote:
 		self.range = 200  # champs de vision
 		self.delta_v = 0  # les pilotes ralentissent pour prendre les virages, varie entre 0 et 1
 		self.delta_v_max = 1  # les humains roulent à delat_v % de la vitesse max
-		self.acceleration_max = 100  # représente l'accélération maximale en px.s-1
-		self.deceleration_max = 2000  # représente la décélération maximale en px.s-1
+		self.acceleration_max = 5  # représente l'accélération maximale en m.s-1
+		self.deceleration_max = 10  # représente la décélération maximale en m.s-1
 		self.distance_freinage = self.range  # distance avant laquelle le pilote ne commence à freiner
 		self.fenetre = fenetre  # contient la fenetre sur laquelle est affichée la voiture
 
@@ -80,18 +80,23 @@ class Pilote:
 		vitesse_cible = self.current_road.v_max * self.delta_v
 		coeff = 1
 
-		distance_freinage = self.range  # todo: modifier pour tenir compte de la vitesse
+		distance_freinage = self.range / 10  # todo: modifier pour tenir compte de la vitesse
 
 		if pilote[0] and pilote[1] < distance_freinage:
 
 			# ====== On vérifie que la voiture se trouve devant la notre ===== #
 			normale = [self.voiture.direction[1], self.voiture.direction[0]]  # vecteur [-b, a]
+			# on ne met pas de moins devant b pour tenir compte du système de coordonnéees
 
 			dx = pilote[0].pos[0] - self.pos[0]
 			dy = pilote[0].pos[1] - self.pos[1]
 
-			if signe(dx) == signe(normale[0]) and signe(dy) == signe(normale[1]):  # systeme de coords de la fenetre
-				coeff = pilote[1] / distance_freinage
+			if signe(dx) == signe(normale[0]) and signe(dy) == signe(normale[1]):
+
+				if self.current_road == pilote[0].current_road:
+					coeff = pilote[1] / distance_freinage
+				elif len(self.chemin) > 1 and self.chemin[1] == pilote[0].current_road:
+					coeff = pilote[1] / distance_freinage
 
 			# ================================================================ #
 
@@ -111,7 +116,7 @@ class Pilote:
 			if self.current_road.prio < 0:
 				coeff = inter[1] / distance_freinage
 
-			if self.current_road.prio >= 0 and inter[1] < 5:  # todo: affiner le virage
+			if self.current_road.prio >= 0 and inter[1] < 1:  # todo: affiner le virage
 
 				if len(self.chemin) > 1:
 					self.chemin.append(self.chemin.pop(0))

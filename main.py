@@ -16,15 +16,15 @@ pygame.init()
 fenetre = pygame.display.set_mode((700, 600))
 
 continuer = True
-voiture = Voiture(pos=[0, 100])
+voiture = Voiture(pos=[0, 10])
 voiture.vitesse = 0
 
-voiture2 = Voiture(pos=[600, 500])
+voiture2 = Voiture(pos=[60, 50])
 voiture2.vitesse = 0
 
-debut = Intersection([0, 100])
-A = [400, 50]
-fin = Intersection([600, 500])
+debut = Intersection([0, 10])
+A = [40, 5]
+fin = Intersection([60, 50])
 
 
 length = get_distance_obj(debut, fin)
@@ -39,11 +39,13 @@ direction = lambda pos: [pente_x, pente_y]
 direction_2 = lambda pos: [pente_x_2, pente_y_2]
 direction_ellipse = find_ellipse(debut.pos, fin.pos, A)
 
+kmh = 1 / 3.6  # 1 kmh en m.s-1
+
 route = Route(debut, fin, direction_ellipse)
-route.v_max = 100
+route.v_max = 50 * kmh
 
 route2 = Route(fin, debut, direction_2)
-route2.v_max = 100
+route2.v_max = 50 * kmh
 
 pilote = Pilote(voiture, fin, fenetre)
 pilote.chemin = [route, route2]
@@ -81,8 +83,6 @@ while continuer:
 
 	pilote.update(intersections, pilotes)
 	pilote2.update(intersections, pilotes)
-
-	print(get_distance_obj(pilote, pilote2))
 
 	pygame.display.update()
 

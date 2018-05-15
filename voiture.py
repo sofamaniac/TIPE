@@ -24,19 +24,19 @@ class Voiture(graph.GraphObject):
 
 		# ======CREATION DE L'IMAGE DE LA VOITURE====== #
 
-		self.length = 60  # utitlisé pour prendre en compte la longueur de la voiture dans le calcul de distance
-		height = 32
+		length = 40  # utitlisé pour prendre en compte la longueur de la voiture dans le calcul de distance
+		height = 20
 
-		image = graph.pygame.Surface((self.length, height), SRCALPHA)
+		image = graph.pygame.Surface((length, height), SRCALPHA)
 
-		image_1 = graph.pygame.Surface((int(1 / 4 * self.length), height), SRCALPHA)
-		image_2 = graph.pygame.Surface((int(3 / 4 * self.length), height), SRCALPHA)
+		image_1 = graph.pygame.Surface((int(1 / 4 * length), height), SRCALPHA)
+		image_2 = graph.pygame.Surface((int(3 / 4 * length), height), SRCALPHA)
 
 		image_1.fill((200, 200, 200))
 		image_2.fill((100, 100, 100))
 		image.fill((255, 255, 255))
 		image.blit(image_1, (0, 0))
-		image.blit(image_2, (int(1 / 4 * self.length), 0))
+		image.blit(image_2, (int(1 / 4 * length), 0))
 
 		graph.GraphObject.__init__(self, image, pos, "corner")
 
@@ -64,6 +64,10 @@ class Voiture(graph.GraphObject):
 		"""Lors du changement de direction il faut mettre à jour l'image de la voiture"""
 		self._direction = new_dir
 		self.angle = angle_between(new_dir)
-		self.rotate(self.angle)
+		self.rotate(self.angle - 90)
+
+	def show(self, fenetre=None):
+
+		fenetre.blit(self.image, [self.pos[0] * M, self.pos[1] * M])
 
 	direction = property(get_dir, set_dir)

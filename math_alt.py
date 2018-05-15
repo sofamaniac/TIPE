@@ -3,7 +3,7 @@
 from math import *
 import numpy as np
 
-M = 15  # mètre de référence en pixel, valeur complètement aléatoire
+M = 10  # mètre de référence en pixel, valeur complètement aléatoire
 
 
 def get_distance_obj(a, b):
