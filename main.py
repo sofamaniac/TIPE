@@ -5,8 +5,8 @@ from time import sleep
 import pygame
 from pygame.locals import *
 
-from voiture import *
 from pilote import *
+from route import *
 
 from ellipse import *
 from math_alt import *
@@ -56,10 +56,16 @@ pilote2.chemin = [route2, route]
 pilote2.current_road = pilote2.chemin[0]
 pilote2.delta_v_max = 1.2
 
-route.prio = 0
+route.prio = 2
+debut.max_prio = 2
+fin.max_prio = 2
 intersections = [debut, fin]
 pilotes = [pilote, pilote2]
 pause = False
+
+feu = Feux()
+feu.intersection = fin
+feu.sequences = [[0, [route]], [0, [route2]]]
 
 while continuer:
 
@@ -78,14 +84,12 @@ while continuer:
 
 	fenetre.fill((0, 0, 0))
 
-	route.show(fenetre)
-	route2.show(fenetre)
-
 	pilote.update(intersections, pilotes)
 	pilote2.update(intersections, pilotes)
 
 	pygame.display.update()
+	feu.update()
 
-	sleep(1/60)
+	sleep(1 / framerate)
 
 pygame.quit()

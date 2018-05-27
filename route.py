@@ -1,5 +1,6 @@
 """Fichier contenant le code relatif aux routes"""
 
+from time import time
 from pygame.locals import SRCALPHA
 
 from math_alt import *
@@ -38,3 +39,33 @@ class Intersection:  # équivaut à un noeud d'un graphe
 		self.voisins = []  # contient une liste des nodes auxquelles est connectée l'intersection
 		self.connection = {}  # couples {intersection: route} pour connaitres les connections entre inersections
 		self.max_prio = 0  # correspond à la priorité maximale de toutes les routes connectées à l'intersection
+
+
+class Feux:
+
+	def __init__(self):
+
+		self.intersection = None
+		self.sequences = [[], []]  # [ [ max_prio_sequence, [routes] ], ...]
+		self.coeff = [10, 10]  # le temps en secondes de vert pour chaque sequence est coeff[0] * max_prio + coeff[1]
+		self.last_activation = 0  # heure du dernier changement d'état
+		self.index_sequence = 0  # contient l'indice de la séquence courante
+
+	def update(self):
+
+		t = time()
+
+		if t - self.last_activation > self.coeff[0] * self.sequences[self.index_sequence][0] + self.coeff[1]:
+
+			self.last_activation = t
+			print(self.index_sequence)
+			# le feu passe au rouge sur les routes concernées
+			for route in self.sequences[self.index_sequence][1]:
+				route.prio = -1
+
+			self.index_sequence += 1
+			self.index_sequence %= len(self.sequences)
+
+			# le feu passe au vert sur les routes concernées
+			for route in self.sequences[self.index_sequence][1]:
+				route.prio = route.prio_max

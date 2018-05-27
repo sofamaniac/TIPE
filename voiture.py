@@ -42,15 +42,15 @@ class Voiture(graph.GraphObject):
 
 	def update(self):
 		"""Fonction mettant à jour la position et la vitesse de la voiture"""
-		self.vitesse += self.acceleration * 1 / 60  # la vitesse est passée px.s-1 sauf que l'on est en px.frame-1
+		self.vitesse += self.acceleration * 1 / framerate  # la vitesse est passée m.s-1 sauf que l'on est en m.frame-1
 
-		if self.vitesse < 0.01:
+		if self.vitesse < 0.05:
 			self.vitesse = 0
 
 		v_x = self.vitesse * self._direction[0]
 		v_y = self.vitesse * self._direction[1]
 
-		self.move(v_x * 1 / 60, v_y * 1 / 60)
+		self.move(v_x * 1 / framerate, v_y * 1 / framerate)
 
 		self.acceleration = 0  # l'accélération est remise à zéro à chaque fois
 
@@ -63,7 +63,7 @@ class Voiture(graph.GraphObject):
 	def set_dir(self, new_dir):
 		"""Lors du changement de direction il faut mettre à jour l'image de la voiture"""
 		self._direction = new_dir
-		self.angle = angle_between(new_dir)
+		self.angle = angle_between(new_dir, dtype="deg")
 		self.rotate(self.angle - 90)
 
 	def show(self, fenetre=None):

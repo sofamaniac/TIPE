@@ -1,6 +1,5 @@
 """Fichier contenant le code nécessaire pour conduire les voitures"""
 
-from route import *
 from voiture import *
 
 
@@ -20,17 +19,31 @@ class Pilote:
 		self.deceleration_max = 10  # représente la décélération maximale en m.s-1
 		self.distance_freinage = self.range  # distance avant laquelle le pilote ne commence à freiner
 		self.fenetre = fenetre  # contient la fenetre sur laquelle est affichée la voiture
+		self.intersection_proche = False
 
 	def update(self, intersections, pilotes):
 		"""Focntion mettant le pilote à jour et devant être appelée une fois par frame"""
-		new_dir = self.current_road.get_direction(self.pos)
+		new_dir = 0
 		old_dir = self.voiture.direction
 
+		if self.intersection_proche and len(self.chemin):
+			# permet de ralentir à l'approche des intersection
+			suivante = self.chemin[1]
+			new_dir = self.chemin[1].get_direction(suivante.debut.pos)
+
+		else:
+			new_dir = self.current_road.get_direction(self.pos)
+
 		diff = get_distance_list(new_dir, old_dir)  # représente la quantité de changement de la direction
-		self.delta_v = self.delta_v_max - diff  # on prend le max pour éviter d'avoir 0
 
 		if new_dir != self.direction:  # on ne met à jour l'image de la voiture que si nécessaire
-			self.voiture.direction = new_dir
+			if self.intersection_proche:
+				self.delta_v = self.delta_v_max - min(diff, 0.2)
+				# on prend le min pour éviter d'avoir 0
+				self.voiture.direction = self.current_road.get_direction(self.pos)
+			else:
+				self.voiture.direction = new_dir
+				self.delta_v = self.delta_v_max - diff
 
 		inter = self.see(intersections)
 		pilote = self.see(pilotes)
@@ -45,6 +58,8 @@ class Pilote:
 			close_pilote = pilote[0]
 
 		self.voiture.update()
+
+		self.intersection_proche = False
 
 		self.conduire(close_inter, close_pilote)
 		self.voiture.show(self.fenetre)
@@ -85,13 +100,13 @@ class Pilote:
 		if pilote[0] and pilote[1] < distance_freinage:
 
 			# ====== On vérifie que la voiture se trouve devant la notre ===== #
-			normale = [self.voiture.direction[1], self.voiture.direction[0]]  # vecteur [-b, a]
-			# on ne met pas de moins devant b pour tenir compte du système de coordonnéees
 
-			dx = pilote[0].pos[0] - self.pos[0]
-			dy = pilote[0].pos[1] - self.pos[1]
+			# on projette les coordonées du pilotes par rapport à la voiture et à sa direction
 
-			if signe(dx) == signe(normale[0]) and signe(dy) == signe(normale[1]):
+			angle = angle_between(self.direction)
+			proj = transform(pilote[0].pos, tr=self.pos, rot=angle)
+
+			if proj[1] <= 0:  # le pilote est visible
 
 				if self.current_road == pilote[0].current_road:
 					coeff = pilote[1] / distance_freinage
@@ -107,6 +122,7 @@ class Pilote:
 
 		if inter[0] and inter[1] < distance_freinage and inter[0] == self.current_road.fin:
 
+			self.intersection_proche = True
 			if inter[0].max_prio > self.current_road.prio:
 				# on ne ralentit que lorsque l'on est pas prioritaire
 				coeff = inter[1] / distance_freinage
@@ -114,7 +130,7 @@ class Pilote:
 
 			# on s'arrete au feu rouge
 			if self.current_road.prio < 0:
-				coeff = inter[1] / distance_freinage
+				coeff = 0
 
 			if self.current_road.prio >= 0 and inter[1] < 1:  # todo: affiner le virage
 
@@ -139,10 +155,8 @@ class Pilote:
 
 			if sens_acc > 0:  # il faut accélérer
 				acceleration = min(self.acceleration_max, acceleration)  # la voiture est limité physiquement
-			# self.voiture._image.fill((0, 255, 0))  # va disparaitre à terme
 
 			else:  # il faut freiner
 				acceleration = -min(self.deceleration_max, acceleration)  # idem
-			# self.voiture._image.fill((255, 0, 0))
 
 			self.voiture.accelerer(acceleration)

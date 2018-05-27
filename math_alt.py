@@ -1,9 +1,10 @@
-"""Fichier contenant les fonction mathémétiques nécessaires au programme"""
+"""Fichier contenant les fonction mathémétiques ainsi que les constantes nécessaires au programme"""
 
 from math import *
 import numpy as np
 
 M = 10  # mètre de référence en pixel, valeur complètement aléatoire
+framerate = 60  # nombre d'actualisation par seconde
 
 
 def get_distance_obj(a, b):
@@ -51,12 +52,18 @@ def get_rotation(coords_a, coords_b=(0, 0)):
 	return angle
 
 
-def angle_between(p1, p2=(0, 0)):
+def angle_between(p1, p2=(0, 0), dtype="rad"):
 	"""Retourne l'angle en degrés du segment formé des deux points"""
 	ang1 = np.arctan2(*p1[::-1])
 	ang2 = np.arctan2(*p2[::-1])
 
-	return np.rad2deg((ang1 - ang2) % (2 * np.pi))
+	res = ang1 - ang2
+
+	if dtype == "rad":
+		return res
+
+	else:
+		return np.rad2deg((ang1 - ang2) % (2 * np.pi))
 
 
 def mappage(x, start_inter, end_inter):
