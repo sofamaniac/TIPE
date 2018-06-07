@@ -27,7 +27,7 @@ class Pilote:
 		old_dir = self.voiture.direction
 
 		if self.intersection_proche and len(self.chemin):
-			# permet de ralentir à l'approche des intersection
+			# permet la transition entre 2 routes
 			suivante = self.chemin[1]
 			new_dir = self.chemin[1].get_direction(suivante.debut.pos)
 
@@ -95,23 +95,24 @@ class Pilote:
 		vitesse_cible = self.current_road.v_max * self.delta_v
 		coeff = 1
 
-		distance_freinage = self.range / 10  # todo: modifier pour tenir compte de la vitesse
-
+		distance_freinage = max(10, 5/9 * self.voiture.vitesse * 5)   # wikipédia : Distance de sécurité en France
 		if pilote[0] and pilote[1] < distance_freinage:
 
 			# ====== On vérifie que la voiture se trouve devant la notre ===== #
 
 			# on projette les coordonées du pilotes par rapport à la voiture et à sa direction
 
-			angle = angle_between(self.direction)
-			proj = transform(pilote[0].pos, tr=self.pos, rot=angle)
+			angle = angle_between(self.voiture.direction)
+			new_point = transform(pilote[0].pos, self.pos, angle)
 
-			if proj[1] <= 0:  # le pilote est visible
+			if new_point[1] >= 0:  # le pilote est visible
 
 				if self.current_road == pilote[0].current_road:
 					coeff = pilote[1] / distance_freinage
+
 				elif len(self.chemin) > 1 and self.chemin[1] == pilote[0].current_road:
-					coeff = pilote[1] / distance_freinage
+						if inter[1] <= distance_freinage and inter[0] == self.current_road.fin:
+							coeff = pilote[1] / distance_freinage
 
 			# ================================================================ #
 
@@ -119,9 +120,9 @@ class Pilote:
 				# on laisse passer les voitures prioritaires
 				if self.current_road.prio < pilote[0].current_road.prio:
 					coeff = 0
+					self.voiture.stop = True
 
 		if inter[0] and inter[1] < distance_freinage and inter[0] == self.current_road.fin:
-
 			self.intersection_proche = True
 			if inter[0].max_prio > self.current_road.prio:
 				# on ne ralentit que lorsque l'on est pas prioritaire
@@ -129,8 +130,9 @@ class Pilote:
 				coeff = mappage(coeff, [0, 1], [0.1, 1])
 
 			# on s'arrete au feu rouge
-			if self.current_road.prio < 0:
+			if self.current_road.prio < 0 and inter[1] < 0.5:
 				coeff = 0
+				self.voiture.stop = True
 
 			if self.current_road.prio >= 0 and inter[1] < 1:  # todo: affiner le virage
 
@@ -141,10 +143,21 @@ class Pilote:
 					self.pos = self.voiture.pos
 
 				else:
-					return  # todo: gérer supression de l'objet
+					return  # todo: gérer supression de l'objet ou sa remise a zero
 
 		if coeff < 0.1:
 			coeff = 0
+			self.voiture.stop = True
+
+		if self.voiture.stop:
+			self.voiture.vitesse = 0
+
+		if self.voiture.stop and inter[0] == self.current_road.fin and inter[1] <= 1 and self.current_road.prio < 0:
+			#  évite de dépasser l'intersection et de sortir de la route aux feux
+			self.voiture.vitesse = 0
+			# if pilote[1] > 4:
+			# 	# évite de superposer les voitures aux intersections
+			# 	self.pos = inter[0].pos[:]
 
 		vitesse_cible *= coeff
 
